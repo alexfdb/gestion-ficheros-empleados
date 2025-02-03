@@ -22,6 +22,7 @@ public class Empleado {
      * @param identificador
      */
     public Empleado(String identificador) {
+        validarIdentificador(identificador);
         this.identificador = identificador;
     }
 
@@ -34,6 +35,7 @@ public class Empleado {
      * @param fechaNacimiento
      */
     public Empleado(String identificador, String nombre, String puesto, double salario, String fechaNacimiento) {
+        validarIdentificador(identificador);
         this.identificador = identificador;
         this.nombre = nombre;
         this.puesto = puesto;
@@ -46,6 +48,7 @@ public class Empleado {
     }
 
     public void setIdentificador(String identificador) {
+        validarIdentificador(identificador);
         this.identificador = identificador;
     }
 
@@ -81,6 +84,10 @@ public class Empleado {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    public boolean validarIdentificador(String identificador) {
+        return !(identificador == null || identificador.isEmpty());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -99,12 +106,6 @@ public class Empleado {
 
     @Override
     public String toString() {
-        return "{" +
-            " identificador='" + getIdentificador() + "'" +
-            ", nombre='" + getNombre() + "'" +
-            ", puesto='" + getPuesto() + "'" +
-            ", salario='" + getSalario() + "'" +
-            ", fechaNacimiento='" + getFechaNacimiento() + "'" +
-            "}";
+        return identificador + ", " + nombre + ", " + puesto + ", " + salario + ", " + fechaNacimiento;
     }
 }
