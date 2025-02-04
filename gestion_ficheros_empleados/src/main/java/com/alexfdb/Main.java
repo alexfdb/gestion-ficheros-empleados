@@ -1,7 +1,8 @@
 package com.alexfdb;
-import com.alexfdb.model.Empleado;
-import com.alexfdb.file.FileOperations;
 import java.util.Set;
+
+import com.alexfdb.file.FileMapOperations;
+import com.alexfdb.model.Empleado;
 /**
  * @author alexfdb
  * @version 1.0.0
@@ -10,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        FileOperations fileOperations = new FileOperations();
+        FileMapOperations fileOperations = new FileMapOperations();
 
         Empleado empleado1 = new Empleado("E001", "Juan Pérez", "Desarrollador", 2500.50, "1990-05-15");
         Empleado empleado2 = new Empleado("E002", "Ana Gómez", "Diseñadora", 2200.75, "1985-08-22");
