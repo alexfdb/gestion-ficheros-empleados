@@ -9,7 +9,7 @@ import com.alexfdb.operations.Operations;
  */
 public class FileOperations implements Operations {
 
-    private static final String FILE_NAME = "gestion_ficheros_empleados\\src\\main\\resources\\empleados.txt"; // Ruta del archivo en resources
+    private static final String FILE_NAME = "gestion_ficheros_empleados\\src\\main\\resources\\empleados.txt";
 
     /**
      * Crea un nuevo empleado y lo guarda en el archivo.
@@ -19,7 +19,7 @@ public class FileOperations implements Operations {
     @Override
     public boolean create(Empleado empleado) {
         Map<String, Empleado> empleados = obtenerEmpleados();
-        empleados.put(empleado.getIdentificador(), empleado); // Usamos el identificador como clave
+        empleados.put(empleado.getIdentificador(), empleado);
         return reescribirArchivo(empleados);
     }
 
@@ -71,7 +71,7 @@ public class FileOperations implements Operations {
     public boolean update(Empleado empleado) {
         Map<String, Empleado> empleados = obtenerEmpleados();
         if (empleados.containsKey(empleado.getIdentificador())) {
-            empleados.put(empleado.getIdentificador(), empleado); // Actualiza el empleado
+            empleados.put(empleado.getIdentificador(), empleado);
             return reescribirArchivo(empleados);
         }
         return false;
@@ -118,14 +118,14 @@ public class FileOperations implements Operations {
      * @return Un TreeMap con empleados, ordenado por identificador.
      */
     private Map<String, Empleado> obtenerEmpleados() {
-        Map<String, Empleado> empleados = new TreeMap<>(); // Usamos un TreeMap para mantener ordenados los empleados
+        Map<String, Empleado> empleados = new TreeMap<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] datos = line.split(", ");
                 if (datos.length == 5) {
                     Empleado empleado = new Empleado(datos[0], datos[1], datos[2], Double.parseDouble(datos[3]), datos[4]);
-                    empleados.put(empleado.getIdentificador(), empleado); // Se agrega al TreeMap
+                    empleados.put(empleado.getIdentificador(), empleado);
                 }
             }
         } catch (IOException e) {
