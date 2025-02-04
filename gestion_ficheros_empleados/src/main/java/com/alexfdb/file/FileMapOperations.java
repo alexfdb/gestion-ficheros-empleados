@@ -67,7 +67,7 @@ public class FileMapOperations extends FileOperations implements Operations {
     /**
      * Actualiza un empleado si ya existe.
      * @param empleado El empleado con los nuevos datos.
-     * @return true si se actualizó correctamente, false si no se encontró el empleado.
+     * @return true si se actualizo correctamente, false si no se encontro el empleado.
      */
     @Override
     public boolean update(Empleado empleado) {
@@ -100,7 +100,7 @@ public class FileMapOperations extends FileOperations implements Operations {
     }
 
     /**
-     * Obtiene un conjunto de empleados cuya edad esté en el rango de fechas proporcionado.
+     * Obtiene un conjunto de empleados cuya edad este en el rango de fechas proporcionado.
      * @param fechaInicio Fecha de inicio del rango.
      * @param fechaFin Fecha de fin del rango.
      * @return Un conjunto de empleados dentro del rango de edad.

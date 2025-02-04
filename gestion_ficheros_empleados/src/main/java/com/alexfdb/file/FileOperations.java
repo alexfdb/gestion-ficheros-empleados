@@ -38,8 +38,8 @@ abstract class FileOperations {
 
     /**
      * Reescribe el archivo con los empleados proporcionados en el TreeMap.
-     * @param empleados El TreeMap de empleados que se escribirán en el archivo.
-     * @return true si la operación fue exitosa, false si ocurrió un error.
+     * @param empleados El TreeMap de empleados que se escribiran en el archivo.
+     * @return true si la operacion fue exitosa, false si ocurrio un error.
      */
     protected boolean updateFile(Map<String, Empleado> empleados) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {

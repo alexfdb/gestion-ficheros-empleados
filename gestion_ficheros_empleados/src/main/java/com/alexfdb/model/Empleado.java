@@ -12,7 +12,7 @@ public class Empleado {
     private String fechaNacimiento;
 
     /**
-     * Constructor vacío.
+     * Constructor vacio.
      */
     public Empleado() {
     }
