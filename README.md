@@ -29,126 +29,37 @@ E001, Juan Pérez, Desarrollador, 2500.5, 1990-05-15
 
 ```
 
-## A continuacion adjunto la clase FileOperations
+## A continuacion adjunto las clases 
+
+### Operations
 
 ```java
 
-public class FileOperations implements Operations {
+public interface Operations {
+    boolean create(Empleado empleado);
+    boolean delete(String identificador);
+    boolean update(Empleado empleado);
+    Empleado read(String identificador);
+    Empleado read(Empleado empleado);
+    Set<Empleado> empleadosPorPuesto(String puesto);
+    Set<Empleado> empleadosPorEdad(String fechaInicio, String fechaFin);
+}
 
+```
+
+### FileOperations
+
+```java
+
+abstract class FileOperations {
+    
     private static String path = "gestion_ficheros_empleados\\src\\main\\resources\\empleados.txt";
-
-    /**
-     * Crea un nuevo empleado y lo guarda en el archivo.
-     * @param empleado El empleado a crear.
-     * @return true si se ha creado correctamente, false si ocurre un error.
-     */
-    @Override
-    public boolean create(Empleado empleado) {
-        if(empleado == null) return false;
-        Map<String, Empleado> empleados = obtenerEmpleados();
-        empleados.put(empleado.getIdentificador(), empleado);
-        return reescribirArchivo(empleados);
-    }
-
-    /**
-     * Lee un empleado por su identificador.
-     * @param identificador El identificador del empleado a leer.
-     * @return El empleado encontrado o null si no se encuentra.
-     */
-    @Override
-    public Empleado read(String identificador) {
-        if(identificador == null || identificador.isEmpty()) return null;
-        Map<String, Empleado> empleados = obtenerEmpleados();
-        return empleados.get(identificador);
-    }
-
-    /**
-     * Lee un empleado por los datos proporcionados en el objeto Empleado.
-     * @param empleado El objeto Empleado con los datos a buscar.
-     * @return El empleado encontrado o null si no se encuentra.
-     */
-    @Override
-    public Empleado read(Empleado empleado) {
-        if(empleado == null) return null;
-        return read(empleado.getIdentificador());
-    }
-
-    /**
-     * Elimina un empleado por su identificador.
-     * @param identificador El identificador del empleado a eliminar.
-     * @return true si se ha eliminado correctamente, false si no se encuentra.
-     */
-    @Override
-    public boolean delete(String identificador) {
-        if(identificador == null || identificador.isEmpty()) return false;
-        Map<String, Empleado> empleados = obtenerEmpleados();
-        if (empleados.containsKey(identificador)) {
-            empleados.remove(identificador);
-            return reescribirArchivo(empleados);
-        }
-        return false;
-    }
-
-    /**
-     * Actualiza un empleado si ya existe.
-     * @param empleado El empleado con los nuevos datos.
-     * @return true si se actualizó correctamente, false si no se encontró el empleado.
-     */
-    @Override
-    public boolean update(Empleado empleado) {
-        if(empleado == null) return false;
-        Map<String, Empleado> empleados = obtenerEmpleados();
-        if (empleados.containsKey(empleado.getIdentificador())) {
-            empleados.put(empleado.getIdentificador(), empleado);
-            return reescribirArchivo(empleados);
-        }
-        return false;
-    }
-
-    /**
-     * Obtiene un conjunto de empleados con el puesto especificado.
-     * @param puesto El puesto que se busca.
-     * @return Un conjunto de empleados con el puesto indicado.
-     */
-    @Override
-    public Set<Empleado> empleadosPorPuesto(String puesto) {
-        Set<Empleado> empleadosPorPuesto = new HashSet<>();
-        if(puesto == null || puesto.isEmpty()) return empleadosPorPuesto;
-        Map<String, Empleado> empleados = obtenerEmpleados();
-        for (Empleado empleado : empleados.values()) {
-            if (empleado.getPuesto().equalsIgnoreCase(puesto)) {
-                empleadosPorPuesto.add(empleado);
-            }
-        }
-        return empleadosPorPuesto;
-    }
-
-    /**
-     * Obtiene un conjunto de empleados cuya edad esté en el rango de fechas proporcionado.
-     * @param fechaInicio Fecha de inicio del rango.
-     * @param fechaFin Fecha de fin del rango.
-     * @return Un conjunto de empleados dentro del rango de edad.
-     */
-    @Override
-    public Set<Empleado> empleadosPorEdad(String fechaInicio, String fechaFin) {
-        Set<Empleado> empleadosPorEdad = new HashSet<>();
-        if(fechaInicio == null || fechaInicio.isEmpty()) return empleadosPorEdad;
-        if(fechaFin == null || fechaFin.isEmpty()) return empleadosPorEdad;
-        Map<String, Empleado> empleados = obtenerEmpleados();
-        for (Empleado empleado : empleados.values()) {
-            if (empleado.getFechaNacimiento().compareTo(fechaInicio) >= 0 &&
-                empleado.getFechaNacimiento().compareTo(fechaFin) <= 0) {
-                empleadosPorEdad.add(empleado);
-            }
-        }
-        return empleadosPorEdad;
-    }
 
     /**
      * Obtiene todos los empleados del archivo como un TreeMap, ordenado por el identificador.
      * @return Un TreeMap con empleados, ordenado por identificador.
      */
-    private Map<String, Empleado> obtenerEmpleados() {
+    protected Map<String, Empleado> readFile() {
         Map<String, Empleado> empleados = new TreeMap<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line;
@@ -170,7 +81,7 @@ public class FileOperations implements Operations {
      * @param empleados El TreeMap de empleados que se escribirán en el archivo.
      * @return true si la operación fue exitosa, false si ocurrió un error.
      */
-    private boolean reescribirArchivo(Map<String, Empleado> empleados) {
+    protected boolean updateFile(Map<String, Empleado> empleados) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
             for (Empleado empleado : empleados.values()) {
                 writer.write(empleado.toString());
@@ -181,6 +92,125 @@ public class FileOperations implements Operations {
             System.err.println("Error al escribir en el archivo: " + e.getMessage());
             return false;
         }
+    }
+}
+
+```
+
+### FileMapOperations
+
+```java
+
+public class FileMapOperations extends FileOperations implements Operations {
+
+    /**
+     * Crea un nuevo empleado y lo guarda en el archivo.
+     * @param empleado El empleado a crear.
+     * @return true si se ha creado correctamente, false si ocurre un error.
+     */
+    @Override
+    public boolean create(Empleado empleado) {
+        if(empleado == null) return false;
+        if(empleado.getIdentificador() == null || empleado.getIdentificador().isEmpty()) return false;
+        Map<String, Empleado> empleados = readFile();
+        empleados.putIfAbsent(empleado.getIdentificador(), empleado);
+        return updateFile(empleados);
+    }
+
+    /**
+     * Lee un empleado por su identificador.
+     * @param identificador El identificador del empleado a leer.
+     * @return El empleado encontrado o null si no se encuentra.
+     */
+    @Override
+    public Empleado read(String identificador) {
+        if(identificador == null || identificador.isEmpty()) return null;
+        Map<String, Empleado> empleados = readFile();
+        return empleados.get(identificador);
+    }
+
+    /**
+     * Lee un empleado por los datos proporcionados en el objeto Empleado.
+     * @param empleado El objeto Empleado con los datos a buscar.
+     * @return El empleado encontrado o null si no se encuentra.
+     */
+    @Override
+    public Empleado read(Empleado empleado) {
+        if(empleado == null) return null;
+        if(empleado.getIdentificador() == null || empleado.getIdentificador().isEmpty()) return null;
+        return read(empleado.getIdentificador());
+    }
+
+    /**
+     * Elimina un empleado por su identificador.
+     * @param identificador El identificador del empleado a eliminar.
+     * @return true si se ha eliminado correctamente, false si no se encuentra.
+     */
+    @Override
+    public boolean delete(String identificador) {
+        if(identificador == null || identificador.isEmpty()) return false;
+        Map<String, Empleado> empleados = readFile();
+        if (empleados.containsKey(identificador)) {
+            empleados.remove(identificador);
+            return updateFile(empleados);
+        }
+        return false;
+    }
+
+    /**
+     * Actualiza un empleado si ya existe.
+     * @param empleado El empleado con los nuevos datos.
+     * @return true si se actualizó correctamente, false si no se encontró el empleado.
+     */
+    @Override
+    public boolean update(Empleado empleado) {
+        if(empleado == null) return false;
+        if(empleado.getIdentificador() == null || empleado.getIdentificador().isEmpty()) return false;
+        Map<String, Empleado> empleados = readFile();
+        if (empleados.containsKey(empleado.getIdentificador())) {
+            empleados.put(empleado.getIdentificador(), empleado);
+            return updateFile(empleados);
+        }
+        return false;
+    }
+
+    /**
+     * Obtiene un conjunto de empleados con el puesto especificado.
+     * @param puesto El puesto que se busca.
+     * @return Un conjunto de empleados con el puesto indicado.
+     */
+    @Override
+    public Set<Empleado> empleadosPorPuesto(String puesto) {
+        Set<Empleado> empleadosPorPuesto = new HashSet<>();
+        if(puesto == null || puesto.isEmpty()) return empleadosPorPuesto;
+        Map<String, Empleado> empleados = readFile();
+        for (Empleado empleado : empleados.values()) {
+            if (empleado.getPuesto().equalsIgnoreCase(puesto)) {
+                empleadosPorPuesto.add(empleado);
+            }
+        }
+        return empleadosPorPuesto;
+    }
+
+    /**
+     * Obtiene un conjunto de empleados cuya edad esté en el rango de fechas proporcionado.
+     * @param fechaInicio Fecha de inicio del rango.
+     * @param fechaFin Fecha de fin del rango.
+     * @return Un conjunto de empleados dentro del rango de edad.
+     */
+    @Override
+    public Set<Empleado> empleadosPorEdad(String fechaInicio, String fechaFin) {
+        Set<Empleado> empleadosPorEdad = new HashSet<>();
+        if(fechaInicio == null || fechaInicio.isEmpty()) return empleadosPorEdad;
+        if(fechaFin == null || fechaFin.isEmpty()) return empleadosPorEdad;
+        Map<String, Empleado> empleados = readFile();
+        for (Empleado empleado : empleados.values()) {
+            if (empleado.getFechaNacimiento().compareTo(fechaInicio) >= 0 &&
+                empleado.getFechaNacimiento().compareTo(fechaFin) <= 0) {
+                empleadosPorEdad.add(empleado);
+            }
+        }
+        return empleadosPorEdad;
     }
 }
 
