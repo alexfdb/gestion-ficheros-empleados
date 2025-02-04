@@ -9,7 +9,7 @@ import com.alexfdb.operations.Operations;
  */
 public class FileOperations implements Operations {
 
-    private static final String FILE_NAME = "gestion_ficheros_empleados\\src\\main\\resources\\empleados.txt";
+    private static String path = "gestion_ficheros_empleados\\src\\main\\resources\\empleados.txt";
 
     /**
      * Crea un nuevo empleado y lo guarda en el archivo.
@@ -18,6 +18,7 @@ public class FileOperations implements Operations {
      */
     @Override
     public boolean create(Empleado empleado) {
+        if(empleado == null) return false;
         Map<String, Empleado> empleados = obtenerEmpleados();
         empleados.put(empleado.getIdentificador(), empleado);
         return reescribirArchivo(empleados);
@@ -30,6 +31,7 @@ public class FileOperations implements Operations {
      */
     @Override
     public Empleado read(String identificador) {
+        if(identificador == null || identificador.isEmpty()) return null;
         Map<String, Empleado> empleados = obtenerEmpleados();
         return empleados.get(identificador);
     }
@@ -41,9 +43,7 @@ public class FileOperations implements Operations {
      */
     @Override
     public Empleado read(Empleado empleado) {
-        if (empleado == null) {
-            return null;
-        }
+        if(empleado == null) return null;
         return read(empleado.getIdentificador());
     }
 
@@ -54,6 +54,7 @@ public class FileOperations implements Operations {
      */
     @Override
     public boolean delete(String identificador) {
+        if(identificador == null || identificador.isEmpty()) return false;
         Map<String, Empleado> empleados = obtenerEmpleados();
         if (empleados.containsKey(identificador)) {
             empleados.remove(identificador);
@@ -69,6 +70,7 @@ public class FileOperations implements Operations {
      */
     @Override
     public boolean update(Empleado empleado) {
+        if(empleado == null) return false;
         Map<String, Empleado> empleados = obtenerEmpleados();
         if (empleados.containsKey(empleado.getIdentificador())) {
             empleados.put(empleado.getIdentificador(), empleado);
@@ -85,6 +87,7 @@ public class FileOperations implements Operations {
     @Override
     public Set<Empleado> empleadosPorPuesto(String puesto) {
         Set<Empleado> empleadosPorPuesto = new HashSet<>();
+        if(puesto == null || puesto.isEmpty()) return empleadosPorPuesto;
         Map<String, Empleado> empleados = obtenerEmpleados();
         for (Empleado empleado : empleados.values()) {
             if (empleado.getPuesto().equalsIgnoreCase(puesto)) {
@@ -103,6 +106,8 @@ public class FileOperations implements Operations {
     @Override
     public Set<Empleado> empleadosPorEdad(String fechaInicio, String fechaFin) {
         Set<Empleado> empleadosPorEdad = new HashSet<>();
+        if(fechaInicio == null || fechaInicio.isEmpty()) return empleadosPorEdad;
+        if(fechaFin == null || fechaFin.isEmpty()) return empleadosPorEdad;
         Map<String, Empleado> empleados = obtenerEmpleados();
         for (Empleado empleado : empleados.values()) {
             if (empleado.getFechaNacimiento().compareTo(fechaInicio) >= 0 &&
@@ -119,7 +124,7 @@ public class FileOperations implements Operations {
      */
     private Map<String, Empleado> obtenerEmpleados() {
         Map<String, Empleado> empleados = new TreeMap<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] datos = line.split(", ");
@@ -140,7 +145,7 @@ public class FileOperations implements Operations {
      * @return true si la operación fue exitosa, false si ocurrió un error.
      */
     private boolean reescribirArchivo(Map<String, Empleado> empleados) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
             for (Empleado empleado : empleados.values()) {
                 writer.write(empleado.toString());
                 writer.newLine();
