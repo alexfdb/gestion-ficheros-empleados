@@ -44,6 +44,7 @@ public class FileOperations implements Operations {
     @Override
     public Empleado read(Empleado empleado) {
         if(empleado == null) return null;
+        if(empleado.getIdentificador() == null || empleado.getIdentificador().isEmpty()) return null;
         return read(empleado.getIdentificador());
     }
 
