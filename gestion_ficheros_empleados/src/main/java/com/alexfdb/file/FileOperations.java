@@ -25,13 +25,13 @@ abstract class FileOperations {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] datos = line.split(", ");
-                if (datos.length == 5) {
+                if(datos.length == 5) {
                     Empleado empleado = new Empleado(datos[0], datos[1], datos[2], Double.parseDouble(datos[3]), datos[4]);
-                    empleados.put(empleado.getIdentificador(), empleado);
+                    empleados.putIfAbsent(empleado.getIdentificador(), empleado);
                 }
             }
         } catch (IOException e) {
-            System.err.println("Error al leer el archivo: " + e.getMessage());
+            System.out.println("Error al leer el archivo: " + e.getMessage());
         }
         return empleados;
     }
@@ -45,12 +45,12 @@ abstract class FileOperations {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
             for (Empleado empleado : empleados.values()) {
                 writer.write(empleado.toString());
-                writer.newLine();
+                writer.newLine();                
             }
             return true;
         } catch (IOException e) {
-            System.err.println("Error al escribir en el archivo: " + e.getMessage());
-            return false;
+            System.out.println("Error al actualizar el fichero: " + e.getMessage());
         }
+        return false;
     }
 }

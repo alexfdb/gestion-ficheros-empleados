@@ -57,8 +57,7 @@ public class FileMapOperations extends FileOperations implements Operations {
     public boolean delete(String identificador) {
         if(identificador == null || identificador.isEmpty()) return false;
         Map<String, Empleado> empleados = readFile();
-        if (empleados.containsKey(identificador)) {
-            empleados.remove(identificador);
+        if(empleados.remove(identificador) != null) {
             return updateFile(empleados);
         }
         return false;
@@ -74,8 +73,7 @@ public class FileMapOperations extends FileOperations implements Operations {
         if(empleado == null) return false;
         if(empleado.getIdentificador() == null || empleado.getIdentificador().isEmpty()) return false;
         Map<String, Empleado> empleados = readFile();
-        if (empleados.containsKey(empleado.getIdentificador())) {
-            empleados.put(empleado.getIdentificador(), empleado);
+        if(empleados.replace(empleado.getIdentificador(), empleado) != null) {
             return updateFile(empleados);
         }
         return false;
