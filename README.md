@@ -65,33 +65,33 @@ abstract class FileOperations {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] datos = line.split(", ");
-                if (datos.length == 5) {
+                if(datos.length == 5) {
                     Empleado empleado = new Empleado(datos[0], datos[1], datos[2], Double.parseDouble(datos[3]), datos[4]);
-                    empleados.put(empleado.getIdentificador(), empleado);
+                    empleados.putIfAbsent(empleado.getIdentificador(), empleado);
                 }
             }
         } catch (IOException e) {
-            System.err.println("Error al leer el archivo: " + e.getMessage());
+            System.out.println("Error al leer el archivo: " + e.getMessage());
         }
         return empleados;
     }
 
     /**
      * Reescribe el archivo con los empleados proporcionados en el TreeMap.
-     * @param empleados El TreeMap de empleados que se escribirán en el archivo.
-     * @return true si la operación fue exitosa, false si ocurrió un error.
+     * @param empleados El TreeMap de empleados que se escribiran en el archivo.
+     * @return true si la operacion fue exitosa, false si ocurrio un error.
      */
     protected boolean updateFile(Map<String, Empleado> empleados) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
             for (Empleado empleado : empleados.values()) {
                 writer.write(empleado.toString());
-                writer.newLine();
+                writer.newLine();                
             }
             return true;
         } catch (IOException e) {
-            System.err.println("Error al escribir en el archivo: " + e.getMessage());
-            return false;
+            System.out.println("Error al actualizar el fichero: " + e.getMessage());
         }
+        return false;
     }
 }
 
@@ -150,8 +150,7 @@ public class FileMapOperations extends FileOperations implements Operations {
     public boolean delete(String identificador) {
         if(identificador == null || identificador.isEmpty()) return false;
         Map<String, Empleado> empleados = readFile();
-        if (empleados.containsKey(identificador)) {
-            empleados.remove(identificador);
+        if(empleados.remove(identificador) != null) {
             return updateFile(empleados);
         }
         return false;
@@ -160,15 +159,14 @@ public class FileMapOperations extends FileOperations implements Operations {
     /**
      * Actualiza un empleado si ya existe.
      * @param empleado El empleado con los nuevos datos.
-     * @return true si se actualizó correctamente, false si no se encontró el empleado.
+     * @return true si se actualizo correctamente, false si no se encontro el empleado.
      */
     @Override
     public boolean update(Empleado empleado) {
         if(empleado == null) return false;
         if(empleado.getIdentificador() == null || empleado.getIdentificador().isEmpty()) return false;
         Map<String, Empleado> empleados = readFile();
-        if (empleados.containsKey(empleado.getIdentificador())) {
-            empleados.put(empleado.getIdentificador(), empleado);
+        if(empleados.replace(empleado.getIdentificador(), empleado) != null) {
             return updateFile(empleados);
         }
         return false;
@@ -193,7 +191,7 @@ public class FileMapOperations extends FileOperations implements Operations {
     }
 
     /**
-     * Obtiene un conjunto de empleados cuya edad esté en el rango de fechas proporcionado.
+     * Obtiene un conjunto de empleados cuya edad este en el rango de fechas proporcionado.
      * @param fechaInicio Fecha de inicio del rango.
      * @param fechaFin Fecha de fin del rango.
      * @return Un conjunto de empleados dentro del rango de edad.
