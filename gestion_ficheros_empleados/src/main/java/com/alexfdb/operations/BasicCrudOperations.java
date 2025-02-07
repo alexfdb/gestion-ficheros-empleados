@@ -5,7 +5,7 @@ import com.alexfdb.model.Empleado;
  * @author alexfdb
  * @version 1.0.0
  */
-public interface Operations {
+public interface BasicCrudOperations {
     boolean create(Empleado empleado);
     boolean delete(String identificador);
     boolean update(Empleado empleado);

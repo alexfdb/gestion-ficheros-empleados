@@ -1,4 +1,6 @@
-com\alexfdb\file\FileOperations.class
+com\alexfdb\file\CrudSet.class
 com\alexfdb\Main.class
+com\alexfdb\file\BasicFileOperations.class
 com\alexfdb\model\Empleado.class
-com\alexfdb\operations\Operations.class
+com\alexfdb\file\CrudMap.class
+com\alexfdb\operations\BasicCrudOperations.class

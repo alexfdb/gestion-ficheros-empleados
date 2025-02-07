@@ -1,2 +1,0 @@
-E001, Juan Pérez, Desarrollador, 2500.5, 1990-05-15
-E002, Ana Gómez, Diseñadora, 2400.0, 1985-08-22

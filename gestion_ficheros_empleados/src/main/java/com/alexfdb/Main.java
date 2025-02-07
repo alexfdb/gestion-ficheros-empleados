@@ -1,6 +1,6 @@
 package com.alexfdb;
 import java.util.Set;
-import com.alexfdb.file.FileMapOperations;
+import com.alexfdb.file.CrudMap;
 import com.alexfdb.model.Empleado;
 /**
  * @author alexfdb
@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        FileMapOperations fileOperations = new FileMapOperations();
+        CrudMap fileOperations = new CrudMap();
 
         Empleado empleado1 = new Empleado("E001", "Juan Pérez", "Desarrollador", 2500.50, "1990-05-15");
         Empleado empleado2 = new Empleado("E002", "Ana Gómez", "Diseñadora", 2200.75, "1985-08-22");

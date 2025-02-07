@@ -3,12 +3,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import com.alexfdb.model.Empleado;
-import com.alexfdb.operations.Operations;
+import com.alexfdb.operations.BasicCrudOperations;
 /**
  * @author alexfdb
  * @version 1.0.0
  */
-public class FileMapOperations extends FileOperations implements Operations {
+public class CrudMap extends BasicFileOperations implements BasicCrudOperations {
 
     /**
      * Crea un nuevo empleado y lo guarda en el archivo.
@@ -19,9 +19,9 @@ public class FileMapOperations extends FileOperations implements Operations {
     public boolean create(Empleado empleado) {
         if(empleado == null) return false;
         if(empleado.getIdentificador() == null || empleado.getIdentificador().isEmpty()) return false;
-        Map<String, Empleado> empleados = readFile();
+        Map<String, Empleado> empleados = readFileMap();
         empleados.putIfAbsent(empleado.getIdentificador(), empleado);
-        return updateFile(empleados);
+        return updateFileMap(empleados);
     }
 
     /**
@@ -32,7 +32,7 @@ public class FileMapOperations extends FileOperations implements Operations {
     @Override
     public Empleado read(String identificador) {
         if(identificador == null || identificador.isEmpty()) return null;
-        Map<String, Empleado> empleados = readFile();
+        Map<String, Empleado> empleados = readFileMap();
         return empleados.get(identificador);
     }
 
@@ -56,9 +56,9 @@ public class FileMapOperations extends FileOperations implements Operations {
     @Override
     public boolean delete(String identificador) {
         if(identificador == null || identificador.isEmpty()) return false;
-        Map<String, Empleado> empleados = readFile();
+        Map<String, Empleado> empleados = readFileMap();
         if(empleados.remove(identificador) != null) {
-            return updateFile(empleados);
+            return updateFileMap(empleados);
         }
         return false;
     }
@@ -72,9 +72,9 @@ public class FileMapOperations extends FileOperations implements Operations {
     public boolean update(Empleado empleado) {
         if(empleado == null) return false;
         if(empleado.getIdentificador() == null || empleado.getIdentificador().isEmpty()) return false;
-        Map<String, Empleado> empleados = readFile();
+        Map<String, Empleado> empleados = readFileMap();
         if(empleados.replace(empleado.getIdentificador(), empleado) != null) {
-            return updateFile(empleados);
+            return updateFileMap(empleados);
         }
         return false;
     }
@@ -88,7 +88,7 @@ public class FileMapOperations extends FileOperations implements Operations {
     public Set<Empleado> empleadosPorPuesto(String puesto) {
         Set<Empleado> empleadosPorPuesto = new HashSet<>();
         if(puesto == null || puesto.isEmpty()) return empleadosPorPuesto;
-        Map<String, Empleado> empleados = readFile();
+        Map<String, Empleado> empleados = readFileMap();
         for (Empleado empleado : empleados.values()) {
             if (empleado.getPuesto().equalsIgnoreCase(puesto)) {
                 empleadosPorPuesto.add(empleado);
@@ -108,7 +108,7 @@ public class FileMapOperations extends FileOperations implements Operations {
         Set<Empleado> empleadosPorEdad = new HashSet<>();
         if(fechaInicio == null || fechaInicio.isEmpty()) return empleadosPorEdad;
         if(fechaFin == null || fechaFin.isEmpty()) return empleadosPorEdad;
-        Map<String, Empleado> empleados = readFile();
+        Map<String, Empleado> empleados = readFileMap();
         for (Empleado empleado : empleados.values()) {
             if (empleado.getFechaNacimiento().compareTo(fechaInicio) >= 0 &&
                 empleado.getFechaNacimiento().compareTo(fechaFin) <= 0) {
