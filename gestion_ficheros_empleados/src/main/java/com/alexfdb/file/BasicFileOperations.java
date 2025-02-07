@@ -27,7 +27,7 @@ abstract class BasicFileOperations {
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] datos = line.split(", ");
+                String[] datos = line.split(",");
                 if(datos.length == 5) {
                     Empleado empleado = new Empleado(datos[0], datos[1], datos[2], Double.parseDouble(datos[3]), datos[4]);
                     empleados.putIfAbsent(empleado.getIdentificador(), empleado);
@@ -48,7 +48,7 @@ abstract class BasicFileOperations {
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] datos = line.split(", ");
+                String[] datos = line.split(",");
                 if(datos.length == 5) {
                     Empleado empleado = new Empleado(datos[0], datos[1], datos[2], Double.parseDouble(datos[3]), datos[4]);
                     empleados.add(empleado);
