@@ -1,8 +1,10 @@
 package com.alexfdb.model;
-
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * @author alexfdb
+ * @version 1.0.0
+ */
 public class EmpleadoTest {
 
     @Test
@@ -20,6 +22,6 @@ public class EmpleadoTest {
     public void testValidarIdentificador() {
         Empleado empleado = new Empleado();
         assertTrue(empleado.validarIdentificador("123"));
-        assertFalse(empleado.validarIdentificador(""));  // Identificador vacío
+        assertFalse(empleado.validarIdentificador(""));
     }
 }

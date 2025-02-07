@@ -1,10 +1,12 @@
 # Informe de Prueba - Gestión de Empleados
 
-Este proyecto gestiona la información de empleados a través de un archivo de texto, permitiendo operaciones como la creación, lectura, actualización, eliminación y consultas específicas.
+Este proyecto gestiona la información de empleados a través de un archivo de texto, permitiendo operaciones como la 
+creación, lectura, actualización, eliminación y otras consultas.
 
 ## Salida del programa
 
-A continuación se muestra la salida generada al ejecutar el programa principal (`Main`), donde se prueban las funciones básicas sobre un conjunto de empleados.
+A continuación se muestra la salida generada al ejecutar el programa, donde se prueban las funciones 
+básicas sobre un conjunto de empleados.
 
 ```code
 
@@ -31,11 +33,18 @@ E001, Juan Pérez, Desarrollador, 2500.5, 1990-05-15
 
 ## A continuacion adjunto las clases 
 
-### Operations
+### BasicCrudOperations
 
 ```java
 
-public interface Operations {
+package com.alexfdb.operations;
+import java.util.Set;
+import com.alexfdb.model.Empleado;
+/**
+ * @author alexfdb
+ * @version 1.0.0
+ */
+public interface BasicCrudOperations {
     boolean create(Empleado empleado);
     boolean delete(String identificador);
     boolean update(Empleado empleado);
